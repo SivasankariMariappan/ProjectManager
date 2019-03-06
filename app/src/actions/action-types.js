@@ -6,6 +6,8 @@ export const actionTypes = {
 		editUser: 'EDIT_USER',
 		loadUserList: 'LOAD_USER_LIST',
 		resetUser: 'RESET_USER',
+		onEditClick: 'ON_EDIT_CLICK',
+		onDeleteClick: 'ON_DELETE_CLICK',
 	}
 
 }

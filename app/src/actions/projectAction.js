@@ -27,15 +27,15 @@ export const addUser = () => {
   };
 };
 
-const _removeUser = ({ id } = {}) => ({
+const _removeUser = ({ userId } = {}) => ({
   type: actionTypes.user.removeUser,
-  data: id
+  data: userId
 });
 
-export const removeUser = ({ id } = {}) => {
+export const removeUser = ({ userId } = {}) => {
   return dispatch => {
-    return axios.delete(`user/${id}`).then(() => {
-      dispatch(_removeUser({ id }));
+    return axios.delete(`user/${userId}`).then(() => {
+      dispatch(_removeUser({ userId }));
     });
   };
 };
@@ -81,4 +81,14 @@ export const getUsers = () => {
 
 export const resetUser = () => ({
   type: actionTypes.user.resetUser
+});
+
+export const onEditClick = (user) => ({
+  type: actionTypes.user.onEditClick,
+  data: user
+});
+
+export const onDeleteClick = (userId) => ({
+  type: actionTypes.user.onDeleteClick,
+  data: userId
 });

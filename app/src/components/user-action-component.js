@@ -1,10 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import {
   onUserChange,
   getUsers,
@@ -12,7 +8,8 @@ import {
   removeUser,
   editUser,
   resetUser,
-  _getUsers
+  _getUsers,
+  onEditClick,
 } from "../actions/projectAction";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -36,8 +33,13 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
   divider: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1
+
+        width: "100%",
+        borderBottom: "1px solid #979797",
+        marginBottom: "10px",
+  },
+  search: {
+    display: "flex",
   }
 });
 
@@ -69,6 +71,10 @@ export class UserActionsComponent extends React.Component {
     }
     this.props._getUsers(filterUsers);
   };
+
+  onClear = () => {
+    this.props.getUsers();
+  }
 
   render() {
     const { classes } = this.props;
@@ -138,8 +144,8 @@ export class UserActionsComponent extends React.Component {
           </div>
         </form>
         <div className={classes.divider} />
-        <SearchAndSortComponent handleSearch={this.handleSearch} />
-        <UserListComponent userList={this.props.userList} />
+           <SearchAndSortComponent handleSearch={this.handleSearch} />
+        <UserListComponent userList={this.props.userList} onDeleteClick={this.props.removeUser} onEditClick={this.props.onEditClick}/>
       </div>
     );
   }
@@ -166,6 +172,7 @@ export default withStyles(styles)(
     removeUser,
     editUser,
     resetUser,
-    _getUsers
+    _getUsers,
+    onEditClick
   })(UserActionsComponent)
 );

@@ -17,17 +17,20 @@ class UserListComponent extends React.Component {
       {
         firstName: "Tanner Linsley",
         lastName: "er",
-        employeeId: "9023"
+        employeeId: "9023",
+        userId: '1',
       },
       {
         firstName: "Tanner Linsley1",
         lastName: "er1",
-        employeeId: "90231"
+        employeeId: "90231",
+        userId: '2',
       },
       {
         firstName: "Tanner Linsley2",
         lastName: "er2",
-        employeeId: "90232"
+        employeeId: "90232",
+        userId: '3',
       }
     ];
 
@@ -47,9 +50,45 @@ class UserListComponent extends React.Component {
         Header: "Employee ID",
         accessor: "employeeId",
         Cell: props => <span className="employeeId">{props.value}</span> // Custom cell components!
-      }
+      },
+            {
+              id: "editUserActions", // Required because our accessor is not a string
+              Header: "",
+              accessor: "userId",
+              Cell: props =>{
+               const { original } = props
+              return(
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={()=> {this.props.onEditClick(original)}}
+                          className={classes.button}
+                        >
+                          Edit
+                        </Button>
+              )
+              }
+              },
+                {
+              id: "deleteUserActions", // Required because our accessor is not a string
+              Header: "",
+              accessor: "userId",
+              Cell: props =>{
+              const { original } = props
+              return(
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={()=> {this.props.onDeleteClick(original)}}
+                          className={classes.button}
+                        >
+                          Delete
+                        </Button>
+              )
+              }
+            }
     ];
     return <ReactTable data={data} columns={columns} />;
   }
 }
-export default UserListComponent;
+export default withStyles(styles)(UserListComponent);

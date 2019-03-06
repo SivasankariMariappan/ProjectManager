@@ -7,6 +7,9 @@ import {
 } from "@material-ui/core";
 import classNames from "classnames";
 import SearchIcon from "@material-ui/icons/Search";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import ClearIcon from '@material-ui/icons/Clear'
 
 const styles = theme => ({
   root: {
@@ -38,7 +41,18 @@ const styles = theme => ({
     "&:hover": {
       backgroundColor: "transparent"
     }
-  }
+  },
+    button: {
+      margin: "0px 10px 0px 10px",
+    },
+    sort: {
+        display: "flex",
+        width: "75%",
+        justifyContent: "flex-end",
+    },
+    search: {
+        display: "flex",
+    },
 });
 
 export class SearchAndSortComponent extends React.Component {
@@ -52,6 +66,15 @@ export class SearchAndSortComponent extends React.Component {
   handleSearch = () => {
     this.props.handleSearch && this.props.handleSearch(this.state.searchText);
   };
+
+    onClear = () => {
+    this.setState({ searchText: '' });
+      this.props.onClear && this.props.onClear();
+    };
+
+    sortByFirstName = (event) => {
+        console.log('event', event.target)
+    }
 
   render() {
     const { searchText } = this.state;
@@ -74,10 +97,26 @@ export class SearchAndSortComponent extends React.Component {
               />
             </IconButton>
           </div>
+                    <div className={classes.clearSeperator} />
+
+                      <div>
+                        <IconButton
+                          id="device-clear-icon"
+                          onClick={this.onClear}
+                          disabled={!searchText}
+                          className={classes.iconButton}
+                        >
+                          <ClearIcon
+                            style={{ color: searchText ? '#0064d2' : '#9b9b9b' }}
+                          />
+                        </IconButton>
+                      </div>
         </InputAdornment>
       )
     };
     return (
+            <div className={classes.search}>
+
       <TextField
         id="searchText"
         color="secondary"
@@ -90,6 +129,37 @@ export class SearchAndSortComponent extends React.Component {
         style={{ width: "25%" }}
         InputProps={inputProps}
       />
+      <div className={classes.sort}>
+      <Typography variant="h5" gutterBottom className={classes.label}>
+                    Sort By:
+                  </Typography>
+      <Button
+                      variant="contained"
+                      color="primary"
+                      name="firstName"
+                      onClick={this.sortByFirstName}
+                      className={classes.button}
+                    >
+                      First Name
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={this.sortByLastName}
+                      className={classes.button}
+                    >
+                      Last Name
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={this.sortByEmployeeId}
+                      className={classes.button}
+                    >
+                      Employee ID
+                    </Button>
+      </div>
+      </div>
     );
   }
 }

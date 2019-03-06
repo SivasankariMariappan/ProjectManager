@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import { Provider } from 'react-redux';
 import AppRouter from './routers/AppRouter';
