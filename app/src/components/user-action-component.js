@@ -9,13 +9,14 @@ import {
   editUser,
   resetUser,
   _getUsers,
-  onEditClick,
-} from "../actions/projectAction";
+  onEditClick
+} from "../actions/userAction";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import UserListComponent from "./user-list-component";
 import SearchAndSortComponent from "./search-and-sort-component";
+import { sortList } from "../utils";
 
 const styles = theme => ({
   textField: {
@@ -33,13 +34,12 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
   divider: {
-
-        width: "100%",
-        borderBottom: "1px solid #979797",
-        marginBottom: "10px",
+    width: "100%",
+    borderBottom: "1px solid #979797",
+    marginBottom: "10px"
   },
   search: {
-    display: "flex",
+    display: "flex"
   }
 });
 
@@ -74,7 +74,13 @@ export class UserActionsComponent extends React.Component {
 
   onClear = () => {
     this.props.getUsers();
-  }
+  };
+
+  onSort = sortQuery => {
+    const sortedList = [...this.props.userList];
+    sortList(sortedList, sortQuery);
+    this.props._getUsers([...sortedList]);
+  };
 
   render() {
     const { classes } = this.props;
@@ -144,14 +150,22 @@ export class UserActionsComponent extends React.Component {
           </div>
         </form>
         <div className={classes.divider} />
-           <SearchAndSortComponent handleSearch={this.handleSearch} />
-        <UserListComponent userList={this.props.userList} onDeleteClick={this.props.removeUser} onEditClick={this.props.onEditClick}/>
+        <SearchAndSortComponent
+          handleSearch={this.handleSearch}
+          onClear={this.onClear}
+          onSort={this.onSort}
+        />
+        <UserListComponent
+          userList={this.props.userList}
+          onDeleteClick={this.props.removeUser}
+          onEditClick={this.props.onEditClick}
+        />
       </div>
     );
   }
 
   componentDidMount() {
-    // this.props.getUsers();
+    this.props.getUsers();
   }
 }
 const mapStateToProps = state => {

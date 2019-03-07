@@ -1,4 +1,4 @@
-export const sortDeviceList = (array, sort) => {
+export const sortList = (array, sort) => {
   array.sort((a, b) => {
     const aField = a[sort.id] || ""; //avoid null comparisons
     const bField = b[sort.id] || "";

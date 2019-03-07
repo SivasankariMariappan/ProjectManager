@@ -12,8 +12,8 @@ const styles = theme => ({
 
 class UserListComponent extends React.Component {
   render() {
-    const { classes } = this.props;
-    const data = [
+    const { classes, userList } = this.props;
+    /* const data = [
       {
         firstName: "Tanner Linsley",
         lastName: "er",
@@ -32,7 +32,7 @@ class UserListComponent extends React.Component {
         employeeId: "90232",
         userId: '3',
       }
-    ];
+    ];*/
 
     const columns = [
       {
@@ -51,44 +51,48 @@ class UserListComponent extends React.Component {
         accessor: "employeeId",
         Cell: props => <span className="employeeId">{props.value}</span> // Custom cell components!
       },
-            {
-              id: "editUserActions", // Required because our accessor is not a string
-              Header: "",
-              accessor: "userId",
-              Cell: props =>{
-               const { original } = props
-              return(
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={()=> {this.props.onEditClick(original)}}
-                          className={classes.button}
-                        >
-                          Edit
-                        </Button>
-              )
-              }
-              },
-                {
-              id: "deleteUserActions", // Required because our accessor is not a string
-              Header: "",
-              accessor: "userId",
-              Cell: props =>{
-              const { original } = props
-              return(
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={()=> {this.props.onDeleteClick(original)}}
-                          className={classes.button}
-                        >
-                          Delete
-                        </Button>
-              )
-              }
-            }
+      {
+        id: "editUserActions", // Required because our accessor is not a string
+        Header: "",
+        accessor: "userId",
+        Cell: props => {
+          const { original } = props;
+          return (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                this.props.onEditClick(original);
+              }}
+              className={classes.button}
+            >
+              Edit
+            </Button>
+          );
+        }
+      },
+      {
+        id: "deleteUserActions", // Required because our accessor is not a string
+        Header: "",
+        accessor: "userId",
+        Cell: props => {
+          const { original } = props;
+          return (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                this.props.onDeleteClick(original);
+              }}
+              className={classes.button}
+            >
+              Delete
+            </Button>
+          );
+        }
+      }
     ];
-    return <ReactTable data={data} columns={columns} />;
+    return <ReactTable data={userList} columns={columns} />;
   }
 }
 export default withStyles(styles)(UserListComponent);
