@@ -87,8 +87,8 @@ export class ProjectActionComponent extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { project, startDate, endDate, firstName, priority } = this.props;
-    const enableSubmit = project && firstName && firstName;
+    const { projectName, startDate, endDate, firstName, priority } = this.props;
+    const enableSubmit = projectName && firstName && priority;
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -100,7 +100,7 @@ export class ProjectActionComponent extends React.Component {
               id="project-name"
               className={classes.textField}
               value={firstName}
-              onChange={this.handleChange("project")}
+              onChange={this.handleChange("projectName")}
               margin="normal"
               variant="filled"
             />
@@ -184,12 +184,14 @@ export class ProjectActionComponent extends React.Component {
   }
 }
 const mapStateToProps = state => {
+  console.log("prjectuser", state.projectUser);
+
   return {
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-    employeeId: state.user.employeeId,
-    userId: state.user.userId,
-    userList: state.user.userList
+    firstName: state.projectUser.user.firstName,
+    lastName: state.projectUser.user.lastName,
+    employeeId: state.projectUser.user.employeeId,
+    userId: state.projectUser.user.userId,
+    userList: state.projectUser.user.userList
   };
 };
 

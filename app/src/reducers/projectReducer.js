@@ -6,14 +6,17 @@ const userObj = {
   employeeId: "",
   userId: ""
 };
-const projectReducerDefaultState = {
+const userReducerDefaultState = {
   user: {
     ...userObj,
     userList: []
   }
 };
 
-export default (state = projectReducerDefaultState, action = {}) => {
+export const projectReducer = (
+  state = userReducerDefaultState,
+  action = {}
+) => {
   switch (action.type) {
     case actionTypes.user.onUserChange:
       return {

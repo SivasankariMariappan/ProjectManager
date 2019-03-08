@@ -14,7 +14,7 @@ const _addUser = addedUser => ({
 
 export const addUser = () => {
   return (dispatch, getState) => {
-    const userData = getState().user;
+    const userData = getState().projectUser.user;
     const payload = {
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -47,7 +47,7 @@ const _editUser = updatedUserObj => ({
 
 export const editUser = () => {
   return (dispatch, getState) => {
-    const userData = getState().user;
+    const userData = getState().projectUser.user;
     const payload = {
       userId: userData.userId,
       firstName: userData.firstName,

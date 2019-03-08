@@ -169,12 +169,13 @@ export class UserActionsComponent extends React.Component {
   }
 }
 const mapStateToProps = state => {
+  console.log("prjectuser", state.projectUser);
   return {
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-    employeeId: state.user.employeeId,
-    userId: state.user.userId,
-    userList: state.user.userList
+    firstName: state.projectUser.user.firstName,
+    lastName: state.projectUser.user.lastName,
+    employeeId: state.projectUser.user.employeeId,
+    userId: state.projectUser.user.userId,
+    userList: state.projectUser.user.userList
   };
 };
 

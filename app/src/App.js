@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import './App.css';
-import { Provider } from 'react-redux';
-import AppRouter from './routers/AppRouter';
-import getAppStore from './store/store';
+import React, { Component } from "react";
+import "./App.css";
+import { Provider } from "react-redux";
+import AppRouter from "./routers/AppRouter";
+import getAppStore from "./store/store";
 
 const store = getAppStore();
 
+console.log("store", store.getState());
 class App extends Component {
   render() {
     return (
-     <Provider store={store}>
+      <Provider store={store}>
         <AppRouter />
-    </Provider>
+      </Provider>
     );
-  };
-};
+  }
+}
 
 export default App;

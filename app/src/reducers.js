@@ -1,7 +1,11 @@
-import { ProjectReducer } from "./reducers/projectReducer";
+import { userReducer } from "./reducers/userReducer";
+import { projectReducer } from "./reducers/projectReducer";
 import { combineReducers } from "redux";
 
-export default allReducers =>
+const allReducers = () =>
   combineReducers({
-    projectUser: ProjectReducer
+    projectUser: userReducer,
+    project: projectReducer
   });
+
+export default allReducers;

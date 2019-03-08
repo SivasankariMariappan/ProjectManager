@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
-import projectState from "../reducers/projectReducer";
+import allReducers from "../reducers";
 import thunk from "redux-thunk";
 
 export default () => {
-  return createStore(projectState, applyMiddleware(thunk));
+  return createStore(allReducers, applyMiddleware(thunk));
 };
