@@ -45,9 +45,8 @@ public class ProjectController {
 		project.setEndDate(p.getEndDate());
 		project.setPriority(p.getPriority());
 		project.setUserId(p.getUserId());
-		
-		projectRepository.save(project);
-		
+
+		p.setProjectId(projectRepository.save(project).getProjectId());
 		p.setCompletedTaskNumber(0);
 		p.setTaskNumber(0);
 		

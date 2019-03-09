@@ -13,26 +13,6 @@ const styles = theme => ({
 class UserListComponent extends React.Component {
   render() {
     const { classes, userList } = this.props;
-    /* const data = [
-      {
-        firstName: "Tanner Linsley",
-        lastName: "er",
-        employeeId: "9023",
-        userId: '1',
-      },
-      {
-        firstName: "Tanner Linsley1",
-        lastName: "er1",
-        employeeId: "90231",
-        userId: '2',
-      },
-      {
-        firstName: "Tanner Linsley2",
-        lastName: "er2",
-        employeeId: "90232",
-        userId: '3',
-      }
-    ];*/
 
     const columns = [
       {

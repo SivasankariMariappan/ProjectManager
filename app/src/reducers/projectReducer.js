@@ -1,94 +1,80 @@
 import { actionTypes } from "../actions/action-types";
 
-const userObj = {
-  firstName: "",
-  lastName: "",
-  employeeId: "",
-  userId: ""
+const projectObj = {
+  projectId: "",
+  projectName: "",
+  startDate: null,
+  endDate: null,
+  priority: 0,
+  userId: "",
+  manager: "",
 };
-const userReducerDefaultState = {
-  user: {
-    ...userObj,
-    userList: []
-  }
+const projectReducerDefaultState = {
+  ...projectObj,
+    projectList: [],
 };
 
 export const projectReducer = (
-  state = userReducerDefaultState,
+  state = projectReducerDefaultState,
   action = {}
 ) => {
   switch (action.type) {
-    case actionTypes.user.onUserChange:
+    case actionTypes.project.onProjectChange:
       return {
         ...state,
-        user: {
-          ...state.user,
-          ...action.data
-        }
+        ...action.data,
       };
-    case actionTypes.user.loadUserList:
+    case actionTypes.project.loadProjectList:
       return {
         ...state,
-        user: {
-          ...state.user,
-          ...action.data
-        }
+          ...action.data,
       };
-    case actionTypes.user.addUser:
-      const newUser = action.data;
-      const userList = [...state.user.userList];
-      userList.push(newUser);
+    case actionTypes.project.addProject:
+      const newProject = action.data;
+      let projectList = [...state.projectList];
+      projectList.push(newProject);
       return {
         ...state,
-        user: {
-          ...userObj,
-          userList
-        }
+        ...projectObj,
+          projectList
       };
-    case actionTypes.user.onEditClick:
-      const userToShow = action.data;
+    case actionTypes.project.onProjectEditClick:
+      const {projectId, projectName, startDate, endDate, priority, userId, manager} = action.data;
       return {
         ...state,
-        user: {
-          firstName: userToShow.firstName,
-          lastName: userToShow.lastName,
-          employeeId: userToShow.employeeId,
-          userId: userToShow.userId,
-          userList: [...state.user.userList]
-        }
+        projectId,
+        projectName,
+        startDate,
+        endDate,
+        priority,
+        userId,
+        manager
       };
-    case actionTypes.user.editUser:
-      const updatedUser = action.data;
-      const userListForEdit = [...state.user.userList];
-      let index = userListForEdit.findIndex(
-        user => user.userId === updatedUser.userId
+    case actionTypes.project.editProject:
+      const updatedProject = action.data;
+      const projectListForEdit = [...state.projectList];
+      let index = projectListForEdit.findIndex(
+        project => project.projectId === updatedProject.projectId
       );
-      if (index > -1) userListForEdit[index] = updatedUser;
+      if (index > -1) projectListForEdit[index] = updatedProject;
       return {
         ...state,
-        user: {
-          ...userObj,
-          userList: userListForEdit
-        }
+        ...projectObj,
+        projectList: projectListForEdit,
       };
-    case actionTypes.user.removeUser:
-      const userListForRemove = state.user.userList.filter(
-        user => user.userId !== action.data
+    case actionTypes.project.removeProject:
+      const projectListForRemove = state.projectList.filter(
+        project => project.projectId !== action.data
       );
       return {
         ...state,
-        user: {
-          ...userObj,
-          userList: userListForRemove
-        }
+          ...projectObj,
+          projectList: projectListForRemove,
       };
-    case actionTypes.user.resetUser:
+    case actionTypes.project.resetProject:
       return {
         ...state,
-        user: {
-          ...state.user,
-          ...userObj
-        }
+        ...projectObj,
       };
     default:
       return state;

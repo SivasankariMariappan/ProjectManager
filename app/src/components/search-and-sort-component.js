@@ -72,21 +72,9 @@ export class SearchAndSortComponent extends React.Component {
     this.props.onClear && this.props.onClear();
   };
 
-  sortByFirstName = event => {
-    this.props.onSort({ id: "firstName", desc: false });
-  };
-
-  sortByLastName = event => {
-    this.props.onSort({ id: "lastName", desc: false });
-  };
-
-  sortByEmployeeId = event => {
-    this.props.onSort({ id: "employeeId", desc: false });
-  };
-
   render() {
     const { searchText } = this.state;
-    const { classes } = this.props;
+    const { classes, sortQueries } = this.props;
     const inputProps = {
       disableUnderline: true,
 
@@ -140,31 +128,19 @@ export class SearchAndSortComponent extends React.Component {
           <Typography variant="h5" gutterBottom className={classes.label}>
             Sort By:
           </Typography>
-          <Button
+          {sortQueries.map((query,index) => (
+                        <Button
+                        key={String(index)}
             variant="contained"
             color="primary"
-            name="firstName"
-            onClick={this.sortByFirstName}
+            name={query.id}
+            onClick={() => {this.props.onSort(query)}}
             className={classes.button}
           >
-            First Name
+            {query.label}
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.sortByLastName}
-            className={classes.button}
-          >
-            Last Name
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.sortByEmployeeId}
-            className={classes.button}
-          >
-            Employee ID
-          </Button>
+
+          ) )}
         </div>
       </div>
     );

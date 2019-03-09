@@ -2,8 +2,6 @@ import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import Autosuggest from "react-autosuggest";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -33,9 +31,6 @@ function renderInput(inputProps) {
 }
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-  const matches = match(suggestion.label, query);
-  const parts = parse(suggestion.label, matches);
-
   return (
     <MenuItem
       selected={isHighlighted}
@@ -50,9 +45,7 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
       }}
     >
       <div>
-        {parts.map((part, index) => (
-          <span key={String(index)}>{part.text}</span>
-        ))}
+        {suggestion.label}
       </div>
     </MenuItem>
   );
@@ -134,12 +127,12 @@ class IntegrationAutosuggest extends React.Component {
           exists = true;
         }
       });
-      if (!exists) {
+      if (!exists && suggestions.length === 0) {
         let label = '"' + value;
         label = label + '"';
         suggestions.push({
-          label: label + " create new tag",
-          value: value
+          label: "No matches found",
+          value: "",
         });
       }
 
@@ -172,12 +165,9 @@ class IntegrationAutosuggest extends React.Component {
     this.setState({ value: "" });
   }
 
-  componentDidMount() {
-    this.props.onRef(this);
-  }
-
   render() {
     const { classes } = this.props;
+    console.log('manager', this.props.value)
     return (
       <Autosuggest
         theme={{
@@ -196,7 +186,7 @@ class IntegrationAutosuggest extends React.Component {
         renderSuggestion={renderSuggestion}
         inputProps={{
           classes,
-          value: this.state.value,
+          value: this.props.value,
           onChange: this.handleChange,
           placeholder: this.props.placeholder
         }}

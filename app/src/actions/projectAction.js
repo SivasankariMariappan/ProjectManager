@@ -1,12 +1,13 @@
 import axios from "../axios/axios";
 import { actionTypes } from "./action-types";
+import moment from "moment";
 
-/*export const onUserChange = userObj => dispatch => {
+export const onProjectFieldChange = projectObj => dispatch => {
   dispatch({
-    type: actionTypes.user.onUserChange,
-    data: userObj
+    type: actionTypes.project.onProjectChange,
+    data: projectObj
   });
-};*/
+};
 const _addProject = addedProject => ({
   type: actionTypes.project.addProject,
   data: addedProject
@@ -14,13 +15,14 @@ const _addProject = addedProject => ({
 
 export const addProject = () => {
   return (dispatch, getState) => {
+    let project = getState().project;
     const {
       projectName,
       startDate,
       endDate,
       priority,
       userId
-    } = getState().project;
+    } = project;
     const payload = {
       projectName,
       startDate,
@@ -30,7 +32,11 @@ export const addProject = () => {
     };
 
     return axios.post("project", payload).then(result => {
-      dispatch(_addProject(result.data));
+      project.projectId = result.data.projectId;
+            project.taskNumber = result.data.taskNumber;
+      project.completedTaskNumber = result.data.completedTaskNumber;
+
+      dispatch(_addProject(project));
     });
   };
 };
@@ -55,22 +61,26 @@ const _editProject = updatedProjectObj => ({
 
 export const editProject = () => {
   return (dispatch, getState) => {
+    const project = getState().project;
     const {
       projectId,
       projectName,
       startDate,
       endDate,
-      priority
-    } = getState().project;
+      priority,
+      userId,
+      manager
+    } = project
     const payload = {
       projectId,
       projectName,
       startDate,
       endDate,
-      priority
+      priority,
+      userId
     };
     return axios.put("project", payload).then(result => {
-      dispatch(_editProject(result.data));
+      dispatch(_editProject(project));
     });
   };
 };
@@ -100,7 +110,7 @@ export const resetProject = () => ({
 
 export const onEditClick = project => ({
   type: actionTypes.project.onProjectEditClick,
-  data: project
+  data: {...project, startDate: project.startDate ? moment(project.startDate) : null, endDate: project.endDate ? moment(project.endDate) : null}
 });
 
 export const onDeleteClick = projectId => ({

@@ -43,6 +43,12 @@ const styles = theme => ({
   }
 });
 
+const sortQueries = [
+  { id: "firstName", desc: false, label: "First Name" },
+  { id: "lastName", desc: false, label: "Last Name"},
+  { id: "employeeId", desc: false, label: "Employee Id" }
+];
+
 export class UserActionsComponent extends React.Component {
   handleChange = name => event => {
     this.props.onUserChange({ [name]: event.target.value });
@@ -154,6 +160,7 @@ export class UserActionsComponent extends React.Component {
           handleSearch={this.handleSearch}
           onClear={this.onClear}
           onSort={this.onSort}
+          sortQueries={sortQueries}
         />
         <UserListComponent
           userList={this.props.userList}
