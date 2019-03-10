@@ -7,6 +7,7 @@ export const onUserChange = userObj => dispatch => {
     data: userObj
   });
 };
+
 const _addUser = addedUser => ({
   type: actionTypes.user.addUser,
   data: addedUser

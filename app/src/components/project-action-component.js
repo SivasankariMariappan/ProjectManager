@@ -154,9 +154,10 @@ export class ProjectActionComponent extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { projectName, startDate, endDate, priority, userId, userList, manager } = this.props;
+    const { projectId, projectName, startDate, endDate, priority, userId, userList, manager } = this.props;
     const isDateSelected = this.state.setDate ? startDate && endDate : true
     const enableSubmit = projectName && priority && priority && isDateSelected;
+    const buttonText = projectId ? 'Update' : 'Add';
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -200,7 +201,7 @@ export class ProjectActionComponent extends React.Component {
               selected={startDate}
               disableUnderline={false}
               onChange={this.handleStartDateChange}
-              minDate={moment(new Date()).add(1,'days')}
+              minDate={moment()}
               disabled={!this.state.setDate}
             />
           </div>
@@ -219,7 +220,7 @@ export class ProjectActionComponent extends React.Component {
               selected={endDate}
               disableUnderline={false}
               onChange={this.handleEndDateChange}
-              minDate={moment()}
+              minDate={moment(new Date()).add(1,'days')}
               disabled={!this.state.setDate}
             />
           </div>
@@ -271,7 +272,7 @@ export class ProjectActionComponent extends React.Component {
               onClick={this.submitProject}
               className={classes.button}
             >
-              Add
+              {buttonText}
             </Button>
             <Button
               variant="contained"

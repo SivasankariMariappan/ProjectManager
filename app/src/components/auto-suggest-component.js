@@ -167,7 +167,6 @@ class IntegrationAutosuggest extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log('manager', this.props.value)
     return (
       <Autosuggest
         theme={{
@@ -188,7 +187,8 @@ class IntegrationAutosuggest extends React.Component {
           classes,
           value: this.props.value,
           onChange: this.handleChange,
-          placeholder: this.props.placeholder
+          placeholder: this.props.placeholder,
+          disabled: this.props.disabled,
         }}
         highlightFirstSuggestion={true}
       />

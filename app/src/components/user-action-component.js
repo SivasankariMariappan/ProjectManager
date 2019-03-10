@@ -90,8 +90,9 @@ export class UserActionsComponent extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { firstName, lastName, employeeId } = this.props;
+    const { firstName, lastName, employeeId, userId } = this.props;
     const enableSubmit = firstName && lastName && employeeId;
+    const buttonText = userId ? 'Update' : 'Add'
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -142,7 +143,7 @@ export class UserActionsComponent extends React.Component {
               onClick={this.submitUser}
               className={classes.button}
             >
-              Add
+              {buttonText}
             </Button>
             <Button
               variant="contained"
