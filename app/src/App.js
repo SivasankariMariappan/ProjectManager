@@ -6,7 +6,6 @@ import getAppStore from "./store/store";
 
 const store = getAppStore();
 
-console.log("store", store.getState());
 class App extends Component {
   render() {
     return (

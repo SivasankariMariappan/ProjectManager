@@ -32,7 +32,7 @@ export const addTask = () => {
       endDate,
       priority,
       userId,
-      parentTaskId,
+      parentTaskId
     } = task;
     const payload = {
       projectId,
@@ -42,15 +42,15 @@ export const addTask = () => {
       endDate,
       priority,
       userId,
-      parentTaskId,
+      parentTaskId
     };
 
     return axios.post("task/add", payload).then(result => {
-      dispatch(_addTask())
-      if(parentTask){
-        dispatch(getParentTasks())
-      }else{        
-        dispatch(getTasks())
+      dispatch(_addTask());
+      if (parentTask) {
+        dispatch(getParentTasks());
+      } else {
+        dispatch(getTasks());
       }
     });
   };
@@ -87,6 +87,7 @@ export const editTask = () => {
       priority,
       userId,
       parentTaskId,
+      status
     } = task;
     const payload = {
       taskId,
@@ -98,6 +99,7 @@ export const editTask = () => {
       priority,
       userId,
       parentTaskId,
+      status
     };
     return axios.put("task/update", payload).then(result => {
       dispatch(_editTask(task));
@@ -149,22 +151,48 @@ export const resetTask = () => ({
 
 export const onEditClick = task => ({
   type: actionTypes.task.onTaskEditClick,
-  data: {...task, startDate: task.startDate ? moment(task.startDate) : null, endDate: task.endDate ? moment(task.endDate) : null}
+  data: {
+    ...task,
+    startDate: task.startDate ? moment(task.startDate) : null,
+    endDate: task.endDate ? moment(task.endDate) : null
+  }
 });
 
-export const onDeleteClick = taskId => ({
-  type: actionTypes.task.onTaskDeleteClick,
-  data: taskId
-});
+export const onEndTaskClick = task => {
+  return (dispatch, getState) => {
+    const {
+      taskId,
+      projectId,
+      taskName,
+      parentTask,
+      startDate,
+      endDate,
+      priority,
+      userId,
+      parentTaskId
+    } = task;
+    const payload = {
+      taskId,
+      projectId,
+      taskName,
+      parentTask,
+      startDate,
+      endDate,
+      priority,
+      userId,
+      parentTaskId,
+      status: "COMPLETED"
+    };
+    return axios.put("task/update", payload).then(result => {
+      task.status = "COMPLETED";
+      dispatch(_editTask(task));
+    });
+  };
+};
 
-export const searchTasksByProject = projectName  => {
-
-   return ( dispatch, getState) => {
-      const projectList = getState().project.projectList;
-       const project = projectList.find(project => project.projectName.toLowerCase().indexOf(projectName.toLowerCase()) > -1)
-       console.log('Matched project', project);
-       if(project){
-      return axios.get(`task/project/${project.projectId}`).then(result => {
+export const searchTasksByProject = projectId => {
+  return (dispatch, getState) => {
+    return axios.get(`task/project/${projectId}`).then(result => {
       const tasks = [];
 
       result.data.forEach(task => {
@@ -173,6 +201,5 @@ export const searchTasksByProject = projectName  => {
 
       dispatch(_getTasks(tasks));
     });
-    };
   };
 };

@@ -14,39 +14,51 @@ const taskObj = {
   parentTaskName: "",
   parentTask: "",
   parentTaskList: [],
+  status: null
 };
 const taskReducerDefaultState = {
   ...taskObj,
-    taskList: [],
+  taskList: []
 };
 
-export const taskReducer = (
-  state = taskReducerDefaultState,
-  action = {}
-) => {
+export const taskReducer = (state = taskReducerDefaultState, action = {}) => {
   switch (action.type) {
     case actionTypes.task.onTaskChange:
       return {
         ...state,
-        ...action.data,
+        ...action.data
       };
     case actionTypes.task.loadTaskList:
       return {
         ...state,
-          ...action.data,
+        ...action.data
       };
     case actionTypes.task.loadParentTaskList:
       return {
         ...state,
-          ...action.data,
-      };    
+        ...action.data
+      };
     case actionTypes.task.addTask:
       return {
         ...state,
-        ...taskObj,
+        ...taskObj
       };
     case actionTypes.task.onTaskEditClick:
-      const {taskId, taskName, projectId, projectName, parentTask, parentTaskId, parentTaskName, startDate, endDate, priority, userId, userName} = action.data;
+      const {
+        taskId,
+        taskName,
+        projectId,
+        projectName,
+        parentTask,
+        parentTaskId,
+        parentTaskName,
+        startDate,
+        endDate,
+        priority,
+        userId,
+        userName,
+        status
+      } = action.data;
       return {
         ...state,
         taskId,
@@ -60,7 +72,8 @@ export const taskReducer = (
         endDate,
         priority,
         userId,
-        userName
+        userName,
+        status
       };
     case actionTypes.task.editTask:
       const updatedTask = action.data;
@@ -72,7 +85,7 @@ export const taskReducer = (
       return {
         ...state,
         ...taskObj,
-        taskList: taskListForEdit,
+        taskList: [...taskListForEdit]
       };
     case actionTypes.task.removeTask:
       const taskListForRemove = state.taskList.filter(
@@ -80,13 +93,13 @@ export const taskReducer = (
       );
       return {
         ...state,
-          ...taskObj,
-          taskList: taskListForRemove,
+        ...taskObj,
+        taskList: taskListForRemove
       };
     case actionTypes.task.resetTask:
       return {
         ...state,
-        ...taskObj,
+        ...taskObj
       };
     default:
       return state;

@@ -10,15 +10,15 @@ import {
   resetTask,
   _getTasks,
   onEditClick,
-  onDeleteClick,
-  getParentTasks,
   searchTasksByProject,
   onTabChange,
+  onEndTaskClick
 } from "../actions/taskAction";
+import { getProjects } from "../actions/projectAction";
 import "react-table/react-table.css";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import {convertDateStringToLocalTime} from '../utils';
+import { convertDateStringToLocalTime } from "../utils";
 import SearchAndSortComponent from "./search-and-sort-component";
 import { sortList } from "../utils";
 
@@ -30,22 +30,47 @@ const styles = theme => ({
     width: "100%",
     borderBottom: "1px solid #979797",
     marginBottom: "10px"
-  },
+  }
 });
-
 
 const sortQueries = [
   { id: "startDate", desc: false, label: "Start Date" },
-  { id: "endDate", desc: false, label: "End Date"},
+  { id: "endDate", desc: false, label: "End Date" },
   { id: "priority", desc: false, label: "Priority" },
-    { id: "status", desc: false, label: "Completed" }
+  { id: "status", desc: false, label: "Completed" }
 ];
 
-
 class TaskListComponent extends React.Component {
+  state = {
+    searchText: ""
+  };
+  fetchProjectSuggestions = () => {
+    const { projectList } = this.props;
+    const suggestions = [];
+    if (projectList.length) {
+      projectList.forEach(project => {
+        suggestions.push({
+          label: project.projectName,
+          value: project.projectName,
+          projectId: project.projectId
+        });
+      });
+    }
+
+    return suggestions;
+  };
+
+  onProjectSelect = suggestion => {
+    this.setState({ searchText: suggestion.value });
+    this.props.searchTasksByProject(suggestion.projectId);
+  };
+
+  handleUserTypedProjectName = projectName => {
+    this.setState({ searchText: projectName });
+  };
 
   handleSearch = searchText => {
-    this.props.searchTasksByProject(searchText)
+    this.props.searchTasksByProject(searchText);
   };
 
   onClear = () => {
@@ -58,14 +83,18 @@ class TaskListComponent extends React.Component {
     this.props._getTasks([...sortedList]);
   };
 
-  onEditClick = (taskObj) => {
-      this.props.onTabChange(1); //update task screen
-      this.props.onEditClick(taskObj)
-  }
+  onEditClick = taskObj => {
+    this.props.onTabChange(1); //update task screen
+    this.props.onEditClick(taskObj);
+  };
+
+  onEndTaskClick = taskObj => {
+    this.props.onEndTaskClick(taskObj);
+  };
 
   render() {
     const { classes, taskList } = this.props;
-
+    const { searchText } = this.state;
     const columns = [
       {
         Header: "Task",
@@ -77,27 +106,44 @@ class TaskListComponent extends React.Component {
         accessor: "parentTaskName",
         Cell: props => <span className="parentTaskName">{props.value}</span> // Custom cell components!
       },
-                       {
+      {
         Header: "Priority",
         accessor: "priority",
         Cell: props => <span className="priority">{props.value}</span> // Custom cell components!
-      },  
+      },
       {
         Header: "StartDate",
         accessor: "startDate",
-        Cell: props => <span className="startDate">{props.value ? convertDateStringToLocalTime(props.value) : 'Not set'}</span> // Custom cell components!
-      },          
+        Cell: props => (
+          <span className="startDate">
+            {props.value ? (
+              convertDateStringToLocalTime(props.value)
+            ) : (
+              "Not set"
+            )}
+          </span>
+        ) // Custom cell components!
+      },
       {
         Header: "EndDate",
         accessor: "endDate",
-        Cell: props => <span className="endDate">{props.value ? convertDateStringToLocalTime(props.value) : 'Not set'}</span> // Custom cell components!
+        Cell: props => (
+          <span className="endDate">
+            {props.value ? (
+              convertDateStringToLocalTime(props.value)
+            ) : (
+              "Not set"
+            )}
+          </span>
+        ) // Custom cell components!
       },
       {
         id: "editTaskActions", // Required because our accessor is not a string
         Header: "",
-        accessor: "taskId",
+        accessor: "status",
         Cell: props => {
           const { original } = props;
+          const status = props.value;
           return (
             <Button
               variant="contained"
@@ -106,6 +152,7 @@ class TaskListComponent extends React.Component {
                 this.onEditClick(original);
               }}
               className={classes.button}
+              disabled={status === "COMPLETED"}
             >
               Edit
             </Button>
@@ -115,45 +162,54 @@ class TaskListComponent extends React.Component {
       {
         id: "endTaskActions",
         Header: "",
-        accessor: "taskId",
+        accessor: "status",
         Cell: props => {
           const { original } = props;
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                this.props.onEndTaskClick(original);
-              }}
-              className={classes.button}
-            >
-              End Task
-            </Button>
-          );
+          const status = props.value;
+          if (status === "COMPLETED")
+            return <span className="status">{status}</span>;
+          else
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.onEndTaskClick(original);
+                }}
+                className={classes.button}
+              >
+                End Task
+              </Button>
+            );
         }
       }
     ];
     return (
-    <div>
+      <div className={classes.field}>
         <SearchAndSortComponent
           handleSearch={this.handleSearch}
           onClear={this.onClear}
           onSort={this.onSort}
           sortQueries={sortQueries}
+          isViewTask={true}
+          fetchProjectSuggestions={this.fetchProjectSuggestions}
+          onProjectSelect={this.onProjectSelect}
+          handleUserTypedProjectName={this.handleUserTypedProjectName}
+          searchText={this.state.searchText}
         />
-        <div className={classes.divider} />        
-      <ReactTable data={taskList} columns={columns} />;
+        <div className={classes.divider} />
+        <ReactTable data={taskList} columns={columns} />;
       </div>
-    )  
+    );
   }
 
   componentWillMount() {
     this.props.getTasks();
-  }  
+    this.props.getProjects();
+  }
 }
 
 const mapStateToProps = state => {
-  console.log("task", state.task);
   return {
     taskList: state.task.taskList,
     projectId: state.task.projectId,
@@ -170,7 +226,7 @@ const mapStateToProps = state => {
     parentTaskId: state.task.parentTaskId,
     projectList: state.project.projectList,
     userList: state.projectUser.user.userList,
-    parentTaskList: state.task.parentTaskList,
+    parentTaskList: state.task.parentTaskList
   };
 };
 
@@ -186,5 +242,7 @@ export default withStyles(styles)(
     onEditClick,
     onTabChange,
     searchTasksByProject,
+    getProjects,
+    onEndTaskClick
   })(TaskListComponent)
 );

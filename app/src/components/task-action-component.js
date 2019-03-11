@@ -1,12 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  getUsers,
-} from "../actions/userAction";
-import {
-  getProjects,
-} from "../actions/projectAction";
+import { getUsers } from "../actions/userAction";
+import { getProjects } from "../actions/projectAction";
 import {
   onTaskFieldChange,
   getTasks,
@@ -16,42 +12,47 @@ import {
   resetTask,
   _getTasks,
   onEditClick,
-  onDeleteClick,
-  getParentTasks,
+  getParentTasks
 } from "../actions/taskAction";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import UserListComponent from "./user-list-component";
-import SearchAndSortComponent from "./search-and-sort-component";
-import { sortList } from "../utils";
 import DatePicker from "react-datepicker";
 import Slider from "@material-ui/lab/Slider";
 import moment from "moment";
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from "@material-ui/core/Checkbox";
 import "react-datepicker/dist/react-datepicker.css";
-import AutoSuggestComponent from './auto-suggest-component'
-import ProjectListComponent from './project-list-component'
+import AutoSuggestComponent from "./auto-suggest-component";
 
 const styles = theme => ({
   textField: {
-    width: "35%",
+    width: "35%"
   },
   label: {
     textAlign: "center",
-    width: "10%",
+    width: "10%"
   },
   priority: {
     width: "38px",
     textAlign: "center",
-    border: "1px solid darkgrey",
+    border: "1px solid darkgrey"
   },
   field: {
     display: "flex",
     flexWrap: "wrap",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
+  },
+  dateField: {
+    paddingTop: "25px",
+    paddingLeft: "190px",
+    paddingBottom: "9px",
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start"
   },
   button: {
     margin: theme.spacing.unit
@@ -62,96 +63,120 @@ const styles = theme => ({
     marginBottom: "10px"
   },
   slider: {
-    width: "100%",
+    width: "100%"
   },
   search: {
     display: "flex"
   },
-  startDate: {
-
-  },
-  endDate: {
-
-  }
+  startDate: {},
+  endDate: {}
 });
 
 export class TaskActionComponent extends React.Component {
-
   fetchProjectSuggestions = () => {
-    const {projectList} = this.props;
+    const { projectList } = this.props;
     const suggestions = [];
-    if(projectList.length){
-       projectList.forEach(project => {
-        suggestions.push({label: project.projectName, value: project.projectName, projectId: project.projectId});
+    if (projectList.length) {
+      projectList.forEach(project => {
+        suggestions.push({
+          label: project.projectName,
+          value: project.projectName,
+          projectId: project.projectId
+        });
       });
-    };
+    }
 
     return suggestions;
-  }
+  };
 
- fetchParentTaskSuggestions = () => {
-    const {parentTaskList} = this.props;
+  fetchParentTaskSuggestions = () => {
+    const { parentTaskList } = this.props;
     const suggestions = [];
-    if(parentTaskList.length){
-       parentTaskList.forEach(task => {
-        suggestions.push({label: task.parentTask, value: task.parentTask, parentId: task.parentId});
+    if (parentTaskList.length) {
+      parentTaskList.forEach(task => {
+        suggestions.push({
+          label: task.parentTask,
+          value: task.parentTask,
+          parentId: task.parentId
+        });
       });
-    };
+    }
 
     return suggestions;
-  }
+  };
 
   fetchUserSuggestions = () => {
-    const {userList} = this.props;
+    const { userList } = this.props;
     const suggestions = [];
-    if(userList.length){
-       userList.forEach(user => {
-        suggestions.push({label: user.firstName, value: user.firstName, userId: user.userId});
+    if (userList.length) {
+      userList.forEach(user => {
+        suggestions.push({
+          label: user.firstName,
+          value: user.firstName,
+          userId: user.userId
+        });
       });
-    };
+    }
 
     return suggestions;
-  }
+  };
 
-  onProjectSelect = (suggestion) => {
-    this.props.onTaskFieldChange({ 'projectId': suggestion.projectId, 'projectName': suggestion.value });
+  onProjectSelect = suggestion => {
+    this.props.onTaskFieldChange({
+      projectId: suggestion.projectId,
+      projectName: suggestion.value
+    });
   };
 
   handleUserTypedProjectName = projectName => {
-        this.props.onTaskFieldChange({ 'projectName' : projectName });
-  }
+    this.props.onTaskFieldChange({ projectName: projectName });
+  };
 
-  onParentTaskSelect = (suggestion) => {
-    this.props.onTaskFieldChange({ 'parentTaskId': suggestion.parentId, 'parentTaskName': suggestion.value });
+  onParentTaskSelect = suggestion => {
+    this.props.onTaskFieldChange({
+      parentTaskId: suggestion.parentId,
+      parentTaskName: suggestion.value
+    });
   };
 
   handleUserTypedParentTaskName = parentTaskName => {
-        this.props.onTaskFieldChange({ 'parentTaskName' : parentTaskName });
-  }
+    this.props.onTaskFieldChange({ parentTaskName: parentTaskName });
+  };
 
-  onUserSelect = (suggestion) => {
-    console.log('suggestion', suggestion)
-    this.props.onTaskFieldChange({ 'userId': suggestion.userId, 'userName': suggestion.value });
+  onUserSelect = suggestion => {
+    this.props.onTaskFieldChange({
+      userId: suggestion.userId,
+      userName: suggestion.value
+    });
   };
 
   handleUserTypedUserName = userName => {
-        this.props.onTaskFieldChange({ 'userName' : userName });
-  }
+    this.props.onTaskFieldChange({ userName: userName });
+  };
 
   handleChange = name => event => {
     this.props.onTaskFieldChange({ [name]: event.target.value });
   };
 
   handleStartDateChange = date => {
-        this.props.onTaskFieldChange({ 'startDate': date });
-  }
+    this.props.onTaskFieldChange({ startDate: date });
+    this.validateStartAndEndDate(date, this.props.endDate);
+  };
 
   handleEndDateChange = date => {
-        this.props.onTaskFieldChange({ 'endDate': date });
-  }
+    this.props.onTaskFieldChange({ endDate: date });
+    this.validateStartAndEndDate(this.props.startDate, date);
+  };
 
+  validateStartAndEndDate(startDate, endDate) {
+    let momentA = moment(startDate);
+    let momentB = moment(endDate);
+    if (momentA > momentB) {
+      this.props.onTaskFieldChange({ endDate: momentA });
+    }
+  }
   handlePriorityChange = (event, value) => {
-    this.props.onTaskFieldChange({ 'priority': value });
+    this.props.onTaskFieldChange({ priority: value });
   };
 
   submitTask = () => {
@@ -170,10 +195,23 @@ export class TaskActionComponent extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { projectList, projectId, taskId, taskName, projectName, parentTask, parentTaskId, parentTaskName, startDate, endDate, priority, userId, userList, userName } = this.props;
-    const enableTaskSubmit = projectId && taskName && priority && startDate && endDate && userId;
-    const enableSubmit = parentTask ? taskName : enableTaskSubmit
-    const buttonText = taskId ? 'Update' : 'Add';
+    const {
+      projectId,
+      taskId,
+      taskName,
+      projectName,
+      parentTask,
+      parentTaskName,
+      startDate,
+      endDate,
+      priority,
+      userId,
+      userName
+    } = this.props;
+    const enableTaskSubmit =
+      projectId && taskName && priority && startDate && endDate && userId;
+    const enableSubmit = parentTask ? taskName : enableTaskSubmit;
+    const buttonText = taskId ? "Update" : "Add";
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -182,11 +220,13 @@ export class TaskActionComponent extends React.Component {
               Project:{" "}
             </Typography>
             <div className={classes.textField}>
-            <AutoSuggestComponent suggestions={this.fetchProjectSuggestions()} placeholder={"Search and Select Project"} 
-              onSuggestionSelected={this.onProjectSelect}
-              inputchangecallback={this.handleUserTypedProjectName}
-              value={projectName}
-              disabled={parentTask || taskId}
+              <AutoSuggestComponent
+                suggestions={this.fetchProjectSuggestions()}
+                placeholder={"Search and Select Project"}
+                onSuggestionSelected={this.onProjectSelect}
+                inputchangecallback={this.handleUserTypedProjectName}
+                value={projectName}
+                disabled={parentTask || taskId}
               />
             </div>
           </div>
@@ -203,114 +243,113 @@ export class TaskActionComponent extends React.Component {
               variant="filled"
             />
           </div>
-           <div className={classes.field}>
-                   <Checkbox
-                    checked={parentTask}
-                    onChange={this.handleCheckboxClick('parentTask')}
-                    value="parentTask"
-                    color="primary"
-                    disabled={taskId}
-                    />
+          <div className={classes.field}>
+            <Checkbox
+              checked={parentTask}
+              onChange={this.handleCheckboxClick("parentTask")}
+              value="parentTask"
+              color="primary"
+              disabled={taskId}
+            />
             <Typography variant="h5" gutterBottom>
               Parent Task
             </Typography>
-           </div> 
-           <div className={classes.field}>
+          </div>
+          <div className={classes.field}>
             <Typography variant="h5" gutterBottom className={classes.label}>
               Priority:{" "}
             </Typography>
-            <div style={{width: '35%'}}>
-            <Slider
-              className={classes.slider}
-              min={0}
-              max={30}
-              step={5}
-              value={priority}
-              name="priority"
-              id="priority"
-              onChange={this.handlePriorityChange}
-                            disabled={parentTask}
-
-            />
-            <span style={{float: 'left'}}> 0 </span>
-            <span style={{float: 'right'}}> 30 </span>
+            <div style={{ width: "35%" }}>
+              <Slider
+                className={classes.slider}
+                min={0}
+                max={30}
+                step={1}
+                value={priority}
+                name="priority"
+                id="priority"
+                onChange={this.handlePriorityChange}
+                disabled={parentTask}
+              />
+              <span style={{ float: "left" }}> 0 </span>
+              <span style={{ float: "right" }}> 30 </span>
             </div>
-           <TextField
+            <TextField
               id="priority"
               className={classes.priority}
               value={priority}
               margin="normal"
               variant="filled"
               disabled={true}
-            />             
+            />
           </div>
           <div className={classes.field}>
             <Typography variant="h5" gutterBottom className={classes.label}>
               Parent Task:{" "}
             </Typography>
             <div className={classes.textField}>
-            <AutoSuggestComponent suggestions={this.fetchParentTaskSuggestions()} placeholder={"Search and Select Parent Task"} 
-              onSuggestionSelected={this.onParentTaskSelect}
-              inputchangecallback={this.handleUserTypedParentTaskName}
-              value={parentTaskName ? parentTaskName : ""}
-                            disabled={parentTask}
-
+              <AutoSuggestComponent
+                suggestions={this.fetchParentTaskSuggestions()}
+                placeholder={"Search and Select Parent Task"}
+                onSuggestionSelected={this.onParentTaskSelect}
+                inputchangecallback={this.handleUserTypedParentTaskName}
+                value={parentTaskName ? parentTaskName : ""}
+                disabled={parentTask}
               />
             </div>
           </div>
-           <div className={classes.field}>
-          <div className={classes.field}>
-            <Typography variant="h5" gutterBottom>
-              Start Date:{"  "}
-            </Typography>
-            <DatePicker
-              className={classes.startDate}
-              name="startDate"
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              placeholderText="Start Date"
-              dateFormat="DD/MM/YYYY"
-              selected={startDate}
-              disableUnderline={false}
-              onChange={this.handleStartDateChange}
-              minDate={moment()}
-                            disabled={parentTask}
-
-            />
-          </div>
-          <div className={classes.field}>
-            <Typography variant="h5" gutterBottom>
-              End Date:{"  "}
-            </Typography>
-            <DatePicker
-              className={classes.endDate}
-              name="endDate"
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              placeholderText="End Date"
-              dateFormat="DD/MM/YYYY"
-              selected={endDate}
-              disableUnderline={false}
-              onChange={this.handleEndDateChange}
-              minDate={moment(new Date()).add(1,'days')}
-                            disabled={parentTask}
-
-            />
-          </div>
+          <div className={classes.dateField}>
+            <div className={classes.field}>
+              <Typography variant="h5" gutterBottom>
+                Start Date:{"  "}
+              </Typography>
+              <DatePicker
+                className={classes.startDate}
+                name="startDate"
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="Start Date"
+                dateFormat="DD/MM/YYYY"
+                selected={startDate}
+                disableUnderline={false}
+                onChange={this.handleStartDateChange}
+                minDate={moment()}
+                disabled={parentTask}
+              />
+            </div>
+            <div className={classes.field}>
+              <Typography variant="h5" gutterBottom>
+                End Date:{"  "}
+              </Typography>
+              <DatePicker
+                className={classes.endDate}
+                name="endDate"
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="End Date"
+                dateFormat="DD/MM/YYYY"
+                selected={endDate}
+                disableUnderline={false}
+                onChange={this.handleEndDateChange}
+                minDate={moment(new Date()).add(1, "days")}
+                disabled={parentTask}
+              />
+            </div>
           </div>
           <div className={classes.field}>
             <Typography variant="h5" gutterBottom className={classes.label}>
               User:{" "}
             </Typography>
             <div className={classes.textField}>
-            <AutoSuggestComponent suggestions={this.fetchUserSuggestions()} placeholder={"Search and select User"} 
-              onSuggestionSelected={this.onUserSelect}
-              inputchangecallback={this.handleUserTypedUserName}
-              value={userName}
-                            disabled={parentTask}
-
+              <AutoSuggestComponent
+                suggestions={this.fetchUserSuggestions()}
+                placeholder={"Search and select User"}
+                onSuggestionSelected={this.onUserSelect}
+                inputchangecallback={this.handleUserTypedUserName}
+                value={userName}
+                disabled={parentTask}
               />
             </div>
           </div>
@@ -346,7 +385,6 @@ export class TaskActionComponent extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  console.log("task", state.task);
   return {
     projectId: state.task.projectId,
     projectName: state.task.projectName,
@@ -362,7 +400,7 @@ const mapStateToProps = state => {
     parentTaskId: state.task.parentTaskId,
     projectList: state.project.projectList,
     userList: state.projectUser.user.userList,
-    parentTaskList: state.task.parentTaskList,
+    parentTaskList: state.task.parentTaskList
   };
 };
 

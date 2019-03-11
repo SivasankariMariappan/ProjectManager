@@ -44,9 +44,7 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
         }
       }}
     >
-      <div>
-        {suggestion.label}
-      </div>
+      <div>{suggestion.label}</div>
     </MenuItem>
   );
 }
@@ -88,7 +86,7 @@ const styles = theme => ({
   container: {
     flexGrow: 1,
     position: "relative",
-    width: 380
+    width: "100%"
   },
   suggestionsContainerOpen: {
     position: "absolute",
@@ -128,11 +126,9 @@ class IntegrationAutosuggest extends React.Component {
         }
       });
       if (!exists && suggestions.length === 0) {
-        let label = '"' + value;
-        label = label + '"';
         suggestions.push({
           label: "No matches found",
-          value: "",
+          value: ""
         });
       }
 
@@ -188,7 +184,7 @@ class IntegrationAutosuggest extends React.Component {
           value: this.props.value,
           onChange: this.handleChange,
           placeholder: this.props.placeholder,
-          disabled: this.props.disabled,
+          disabled: this.props.disabled
         }}
         highlightFirstSuggestion={true}
       />

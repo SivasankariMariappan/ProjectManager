@@ -118,7 +118,8 @@ public class TaskController {
 			t.setStartDate(task.getStartDate());
 			t.setEndDate(task.getEndDate());
 			t.setPriority(task.getPriority());
-	        t.setStatus(task.getStatus());     
+			t.setUserId(task.getUserId());	
+	           t.setStatus(task.getStatus());     
 			return taskRepo.save(t);	
 		}
 		return null;

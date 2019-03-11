@@ -10,6 +10,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import ClearIcon from "@material-ui/icons/Clear";
+import AutoSuggestComponent from "./auto-suggest-component";
 
 const styles = theme => ({
   root: {
@@ -72,46 +73,47 @@ export class SearchAndSortComponent extends React.Component {
     this.props.onClear && this.props.onClear();
   };
 
-  render() {
+  renderSearchComponent = () => {
+    const { isViewTask, classes } = this.props;
     const { searchText } = this.state;
-    const { classes, sortQueries } = this.props;
-    const inputProps = {
-      disableUnderline: true,
 
-      endAdornment: (
-        <InputAdornment position="end">
-          <div className={classes.clearSeperator} />
-          <div>
-            <IconButton
-              id="device-search-icon"
-              onClick={this.handleSearch}
-              disabled={!searchText}
-              className={classes.iconButton}
-            >
-              <SearchIcon
-                style={{ color: searchText ? "#0064d2" : "#9b9b9b" }}
-              />
-            </IconButton>
-          </div>
-          <div className={classes.clearSeperator} />
+    if (!isViewTask) {
+      const inputProps = {
+        disableUnderline: true,
 
-          <div>
-            <IconButton
-              id="device-clear-icon"
-              onClick={this.onClear}
-              disabled={!searchText}
-              className={classes.iconButton}
-            >
-              <ClearIcon
-                style={{ color: searchText ? "#0064d2" : "#9b9b9b" }}
-              />
-            </IconButton>
-          </div>
-        </InputAdornment>
-      )
-    };
-    return (
-      <div className={classes.search}>
+        endAdornment: (
+          <InputAdornment position="end">
+            <div className={classes.clearSeperator} />
+            <div>
+              <IconButton
+                id="device-search-icon"
+                onClick={this.handleSearch}
+                disabled={!searchText}
+                className={classes.iconButton}
+              >
+                <SearchIcon
+                  style={{ color: searchText ? "#0064d2" : "#9b9b9b" }}
+                />
+              </IconButton>
+            </div>
+            <div className={classes.clearSeperator} />
+
+            <div>
+              <IconButton
+                id="device-clear-icon"
+                onClick={this.onClear}
+                disabled={!searchText}
+                className={classes.iconButton}
+              >
+                <ClearIcon
+                  style={{ color: searchText ? "#0064d2" : "#9b9b9b" }}
+                />
+              </IconButton>
+            </div>
+          </InputAdornment>
+        )
+      };
+      return (
         <TextField
           id="searchText"
           color="secondary"
@@ -124,23 +126,44 @@ export class SearchAndSortComponent extends React.Component {
           style={{ width: "25%" }}
           InputProps={inputProps}
         />
+      );
+    } else {
+      return (
+        <AutoSuggestComponent
+          suggestions={this.props.fetchProjectSuggestions()}
+          placeholder={"Search and Select Project"}
+          onSuggestionSelected={this.props.onProjectSelect}
+          inputchangecallback={this.props.handleUserTypedProjectName}
+          value={this.props.searchText}
+        />
+      );
+    }
+  };
+
+  render() {
+    const { classes, sortQueries } = this.props;
+
+    return (
+      <div className={classes.search}>
+        {this.renderSearchComponent()}
         <div className={classes.sort}>
           <Typography variant="h5" gutterBottom className={classes.label}>
             Sort By:
           </Typography>
-          {sortQueries.map((query,index) => (
-                        <Button
-                        key={String(index)}
-            variant="contained"
-            color="primary"
-            name={query.id}
-            onClick={() => {this.props.onSort(query)}}
-            className={classes.button}
-          >
-            {query.label}
-          </Button>
-
-          ) )}
+          {sortQueries.map((query, index) => (
+            <Button
+              key={String(index)}
+              variant="contained"
+              color="primary"
+              name={query.id}
+              onClick={() => {
+                this.props.onSort(query);
+              }}
+              className={classes.button}
+            >
+              {query.label}
+            </Button>
+          ))}
         </div>
       </div>
     );

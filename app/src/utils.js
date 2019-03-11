@@ -12,8 +12,28 @@ export const sortList = (array, sort) => {
   });
 };
 
-export const convertDateStringToLocalTime = (dateString) => {
-	var localTime = moment.utc(dateString).toDate();
-	localTime = moment(localTime).format('YYYY-MM-DD');
-	return localTime;
-}
+export const convertDateStringToLocalTime = dateString => {
+  var localTime = moment.utc(dateString).toDate();
+  localTime = moment(localTime).format("YYYY-MM-DD");
+  return localTime;
+};
+
+export const inputNameValidation = name => {
+  if (name) {
+    if (name.match(/^[a-zA-Z]+$/)) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+
+export const inputNumberValidation = number => {
+  if (number) {
+    if (number.match(/^[0-9]*$/)) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};

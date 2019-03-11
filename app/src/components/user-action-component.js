@@ -16,7 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import UserListComponent from "./user-list-component";
 import SearchAndSortComponent from "./search-and-sort-component";
-import { sortList } from "../utils";
+import { sortList, inputNameValidation, inputNumberValidation } from "../utils";
 
 const styles = theme => ({
   textField: {
@@ -45,7 +45,7 @@ const styles = theme => ({
 
 const sortQueries = [
   { id: "firstName", desc: false, label: "First Name" },
-  { id: "lastName", desc: false, label: "Last Name"},
+  { id: "lastName", desc: false, label: "Last Name" },
   { id: "employeeId", desc: false, label: "Employee Id" }
 ];
 
@@ -91,8 +91,11 @@ export class UserActionsComponent extends React.Component {
   render() {
     const { classes } = this.props;
     const { firstName, lastName, employeeId, userId } = this.props;
-    const enableSubmit = firstName && lastName && employeeId;
-    const buttonText = userId ? 'Update' : 'Add'
+    const enableSubmit =
+      inputNameValidation(firstName) &&
+      inputNameValidation(lastName) &&
+      inputNumberValidation(employeeId);
+    const buttonText = userId ? "Update" : "Add";
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -177,7 +180,6 @@ export class UserActionsComponent extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  console.log("prjectuser", state.projectUser);
   return {
     firstName: state.projectUser.user.firstName,
     lastName: state.projectUser.user.lastName,

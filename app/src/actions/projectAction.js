@@ -16,13 +16,7 @@ const _addProject = addedProject => ({
 export const addProject = () => {
   return (dispatch, getState) => {
     let project = getState().project;
-    const {
-      projectName,
-      startDate,
-      endDate,
-      priority,
-      userId
-    } = project;
+    const { projectName, startDate, endDate, priority, userId } = project;
     const payload = {
       projectName,
       startDate,
@@ -33,7 +27,7 @@ export const addProject = () => {
 
     return axios.post("project", payload).then(result => {
       project.projectId = result.data.projectId;
-            project.taskNumber = result.data.taskNumber;
+      project.taskNumber = result.data.taskNumber;
       project.completedTaskNumber = result.data.completedTaskNumber;
 
       dispatch(_addProject(project));
@@ -68,9 +62,8 @@ export const editProject = () => {
       startDate,
       endDate,
       priority,
-      userId,
-      manager
-    } = project
+      userId
+    } = project;
     const payload = {
       projectId,
       projectName,
@@ -110,7 +103,11 @@ export const resetProject = () => ({
 
 export const onEditClick = project => ({
   type: actionTypes.project.onProjectEditClick,
-  data: {...project, startDate: project.startDate ? moment(project.startDate) : null, endDate: project.endDate ? moment(project.endDate) : null}
+  data: {
+    ...project,
+    startDate: project.startDate ? moment(project.startDate) : null,
+    endDate: project.endDate ? moment(project.endDate) : null
+  }
 });
 
 export const onDeleteClick = projectId => ({
