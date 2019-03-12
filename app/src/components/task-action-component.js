@@ -68,6 +68,23 @@ const styles = theme => ({
   search: {
     display: "flex"
   },
+  buttonField: {
+    margin: "10px 10px 10px 0px",
+    width: "50%",
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  parentTaskField: {
+    justifyContent: "center",
+    width: "25%",
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center"
+  },
   startDate: {},
   endDate: {}
 });
@@ -243,7 +260,7 @@ export class TaskActionComponent extends React.Component {
               variant="filled"
             />
           </div>
-          <div className={classes.field}>
+          <div className={classes.parentTaskField}>
             <Checkbox
               checked={parentTask}
               onChange={this.handleCheckboxClick("parentTask")}
@@ -301,7 +318,7 @@ export class TaskActionComponent extends React.Component {
           <div className={classes.dateField}>
             <div className={classes.field}>
               <Typography variant="h5" gutterBottom>
-                Start Date:{"  "}
+                Start Date:{"     "}
               </Typography>
               <DatePicker
                 className={classes.startDate}
@@ -320,7 +337,7 @@ export class TaskActionComponent extends React.Component {
             </div>
             <div className={classes.field}>
               <Typography variant="h5" gutterBottom>
-                End Date:{"  "}
+                End Date:{"     "}
               </Typography>
               <DatePicker
                 className={classes.endDate}
@@ -353,7 +370,7 @@ export class TaskActionComponent extends React.Component {
               />
             </div>
           </div>
-          <div className={classes.field}>
+          <div className={classes.buttonField}>
             <Button
               variant="contained"
               color="primary"

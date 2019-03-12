@@ -59,6 +59,15 @@ const styles = theme => ({
   },
   search: {
     display: "flex"
+  },
+  buttonField: {
+    margin: "10px 10px 10px 0px",
+    width: "50%",
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
@@ -288,7 +297,7 @@ export class ProjectActionComponent extends React.Component {
               />
             </div>
           </div>
-          <div className={classes.field}>
+          <div className={classes.buttonField}>
             <Button
               variant="contained"
               color="primary"

@@ -20,15 +20,19 @@ import { sortList, inputNameValidation, inputNumberValidation } from "../utils";
 
 const styles = theme => ({
   textField: {
-    margin: "10px 0px 20px 50px",
-    width: 200
+    width: "35%"
   },
   label: {
-    marginTop: "23px"
+    textAlign: "center",
+    width: "10%"
   },
   field: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    margin: "auto"
   },
   button: {
     margin: theme.spacing.unit
@@ -40,6 +44,15 @@ const styles = theme => ({
   },
   search: {
     display: "flex"
+  },
+  buttonField: {
+    margin: "10px 10px 10px 0px",
+    width: "50%",
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
@@ -138,7 +151,7 @@ export class UserActionsComponent extends React.Component {
               variant="filled"
             />
           </div>
-          <div className={classes.field}>
+          <div className={classes.buttonField}>
             <Button
               variant="contained"
               color="primary"
