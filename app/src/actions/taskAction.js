@@ -16,7 +16,7 @@ export const onTabChange = tabValue => dispatch => {
   });
 };
 
-const _addTask = addedTask => ({
+export const _addTask = addedTask => ({
   type: actionTypes.task.addTask,
   data: addedTask
 });
@@ -56,7 +56,7 @@ export const addTask = () => {
   };
 };
 
-const _removeTask = (taskId = {}) => ({
+export const _removeTask = (taskId = {}) => ({
   type: actionTypes.task.removeTask,
   data: taskId
 });
@@ -69,7 +69,7 @@ export const removeTask = ({ taskId } = {}) => {
   };
 };
 
-const _editTask = updatedTaskObj => ({
+export const _editTask = updatedTaskObj => ({
   type: actionTypes.task.editTask,
   data: updatedTaskObj
 });

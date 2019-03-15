@@ -8,7 +8,8 @@ export const onProjectFieldChange = projectObj => dispatch => {
     data: projectObj
   });
 };
-const _addProject = addedProject => ({
+
+export const _addProject = addedProject => ({
   type: actionTypes.project.addProject,
   data: addedProject
 });
@@ -35,7 +36,7 @@ export const addProject = () => {
   };
 };
 
-const _removeProject = (projectId = {}) => ({
+export const _removeProject = (projectId = {}) => ({
   type: actionTypes.project.removeProject,
   data: projectId
 });
@@ -48,7 +49,7 @@ export const removeProject = ({ projectId } = {}) => {
   };
 };
 
-const _editProject = updatedProjectObj => ({
+export const _editProject = updatedProjectObj => ({
   type: actionTypes.project.editProject,
   data: updatedProjectObj
 });
