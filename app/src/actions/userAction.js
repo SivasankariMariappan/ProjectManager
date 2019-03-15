@@ -8,7 +8,7 @@ export const onUserChange = userObj => dispatch => {
   });
 };
 
-const _addUser = addedUser => ({
+export const _addUser = addedUser => ({
   type: actionTypes.user.addUser,
   data: addedUser
 });
@@ -28,7 +28,7 @@ export const addUser = () => {
   };
 };
 
-const _removeUser = (userId = {}) => ({
+export const _removeUser = (userId = {}) => ({
   type: actionTypes.user.removeUser,
   data: userId
 });
@@ -41,7 +41,7 @@ export const removeUser = ({ userId } = {}) => {
   };
 };
 
-const _editUser = updatedUserObj => ({
+export const _editUser = updatedUserObj => ({
   type: actionTypes.user.editUser,
   data: updatedUserObj
 });
